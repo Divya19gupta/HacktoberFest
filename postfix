@@ -1,0 +1,64 @@
+class Main
+{
+  static boolean isOperand(char ch)
+  {
+    return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (Character.isDigit(ch));
+  }
+
+  static int checkPrecedence(char ch)
+  {
+    switch (ch)
+    {
+      case '+':
+      case '-':      return 1;
+      case '*':
+      case '/':      return 2;
+      case '^':      return 3;
+    }
+    return -1;
+  }
+
+  static String infixToPostfix(CQStack s, String exp)
+  {
+    int i=0, k=0;
+    char c; String out=new String();
+    for(i=0;i<exp.length();i++)
+    {
+      c = exp.charAt(i);
+      if (isOperand(c))	// If the scanned character is an operand, add it to output.
+        out += c;
+      else if (c == '(')	// If the scanned character is an '(', push it to the stack.
+        s.push(c);
+      else if (c == ')')	// If the scanned character is an ')', pop and output from the stack until an '(' is encountered.
+      {
+        while (!s.isEmpty() && s.peek() != '(')
+          out += (char)s.pop();
+        if (!s.isEmpty() && s.peek() != '(')
+          return("Invalid expression.");
+        else
+          s.pop();  // Discard the '(' on stack
+      }
+      else // an operator is encountered
+      {
+        while (!s.isEmpty() && checkPrecedence(c) <= checkPrecedence((char)s.peek()))
+          out += (char)s.pop();
+        s.push(c);
+      }
+    }
+
+    while (!s.isEmpty())	  // pop all the operators from the stack
+      out += (char)s.pop();
+
+    return out;	// Place an ending string terminator.
+  }
+
+  public static void main(String[] args)
+  {
+    CQStack theStack = new CQStack(10); // make new stack
+    String exp = "6/(3^2)-8";
+    String output=null;
+    output=infixToPostfix(theStack, exp);
+    System.out.println("Given infix expression is : " + exp);
+    System.out.println("Equivalent postfix expression is : " + output);
+  }
+}
