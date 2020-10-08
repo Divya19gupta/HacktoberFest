@@ -1,0 +1,33 @@
+public void push(int j) // put item on top of stack
+{
+	if(isFull()){
+      System.out.println("OVERFLOW");
+      return;
+    }
+  	stackArray[++top] = j;
+}
+
+public int pop() // take item from top of stack
+{
+  	if(isEmpty()){
+      return -1;
+    }
+  	int element = stackArray[top];
+  	top--;
+  	return element;
+}
+
+public int getMin()
+{
+  	if(isEmpty()){
+      return -1;
+    }
+  	int min = stackArray[0];
+  	for(int i = 1 ; i <= top ; i++){
+      if(min > stackArray[i]){
+        min = stackArray[i];
+      }
+    }
+//   System.out.println("min = " + min);
+  return min;
+}
