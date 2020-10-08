@@ -1,0 +1,55 @@
+static Node insertBegin(Node n,Node add){
+  add.next = n;
+  n = add;
+  return n;
+}
+static Node shiftSmallLarge(Node org)
+{
+  if(org == null){
+    return org;
+  }
+	Node current = org;
+  	int smallest = 99999,largest = -99999;
+  	Node prev = null,largest_node=null,smallest_node=null,prev_smallest = null, prev_largest = null;
+  	while(current != null){
+      	if(largest < current.data){
+          largest = current.data;
+          largest_node = current;
+          prev_largest = prev;
+        }
+      	if(smallest > current.data){
+          smallest = current.data;
+          prev_smallest = prev;
+          smallest_node = current;
+        }
+      prev = current;
+      current = current.next;
+    }
+  	if(prev_smallest != null){
+      prev_smallest.next = smallest_node.next;
+       org = insertBegin(org,smallest_node);
+    }
+    
+  
+  if(largest_node.next != null){
+   	Node z = org;
+    Node previous = null;
+    while(z.next != null){
+      if(z.data == largest){
+        break;
+      }
+      previous = z;
+      z = z.next;
+    }
+    previous.next = z.next;
+    while(z.next != null){
+      z = z.next;
+    }
+    z.next = new Node(largest);
+  }
+  else{
+    return org;
+  }
+  
+  return org;
+}
